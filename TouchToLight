@@ -1,0 +1,16 @@
+byte LEDpin = 13, // LED at pin 13
+     touchpin = 2; // touch sensor at pin 2
+
+void setup() {
+    pinMode(LEDpin, OUTPUT);
+    pinMode(touchpin, INPUT);
+}
+
+void loop() {
+    if(digitalRead(touchpin)) { // if touch sensor receives input
+        digitalWrite(LEDpin, HIGH);
+    }
+    else {
+        digitalWrite(LEDpin, LOW);
+    }
+}
