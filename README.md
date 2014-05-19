@@ -1,4 +1,4 @@
-A repo for all .ino code planned for use in Puzzle Mania.
+A repo for all `.ino` code planned for use in Puzzle Mania.
 
 ### Standards
 * `delay(8);`
