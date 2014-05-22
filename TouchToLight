@@ -1,19 +1,19 @@
 // turns on light array when touch sensor receives input
 
-byte LEDpin = 13, // light array at pin 13
-     touchpin = 2; // touch sensor at pin 2
+byte lightarray = 13, // light array at pin 13
+     touchsensor = 2; // touch sensor at pin 2
 
 void setup() {
-    pinMode(LEDpin, OUTPUT);
-    pinMode(touchpin, INPUT);
+    pinMode(lightarray, OUTPUT);
+    pinMode(touchsensor, INPUT);
 }
 
 void loop() {
-    if(digitalRead(touchpin)) { // if touch sensor receives input
-        digitalWrite(LEDpin, HIGH);
+    if(digitalRead(touchsensor)) { // if touch sensor receives input
+        digitalWrite(lightarray, HIGH);
     }
     else {
-        digitalWrite(LEDpin, LOW);
+        digitalWrite(lightarray, LOW);
     }
     delay(8);
 }
