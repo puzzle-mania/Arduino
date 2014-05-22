@@ -1,6 +1,6 @@
-// turns on LED when touch sensor receives input
+// turns on light array when touch sensor receives input
 
-byte LEDpin = 13, // LED at pin 13
+byte LEDpin = 13, // light array at pin 13
      touchpin = 2; // touch sensor at pin 2
 
 void setup() {
