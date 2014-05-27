@@ -15,5 +15,5 @@ void loop() {
     else {
         digitalWrite(lightarray, LOW);
     }
-    delay(8);
+    delay(80);
 }

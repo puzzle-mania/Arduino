@@ -70,7 +70,8 @@ void setup() { // runs when Arduino is reset (starts from top when plugged in)
     pinMode(readswitch2, INPUT);
     pinMode(readswitch3, INPUT);
     pinMode(readswitch4, INPUT);
-    while(!(digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4))) {
+    pinMode(touchsensor, INPUT);
+    while(!digitalRead(touchsensor)) {
         delay(80);
     }
     digitalWrite(lightarray, HIGH); // turns on light array
