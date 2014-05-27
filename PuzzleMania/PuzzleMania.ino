@@ -2,15 +2,16 @@
 
 byte lightarray = 13, // light array at pin 13
      speaker = 12, // speaker at pin 12
+     touchsensor = 11, // touch sensor at pin 11
 
      // top bun
-     touchsensor1 = 2, // touch sensor at pin 2
+     readswitch1 = 2, // touch sensor at pin 2
      // lettuce
-     touchsensor2 = 3, // touch sensor at pin 3
+     readswitch2 = 3, // touch sensor at pin 3
      // tomato
-     touchsensor3 = 4, // touch sensor at pin 4
+     readswitch3 = 4, // touch sensor at pin 4
      // burger
-     touchsensor4 = 5, // touch sensor at pin 5
+     readswitch4 = 5, // touch sensor at pin 5
      // bottom bun
 
      sequencelength = 18, // how long note sequences are, counting from 0 because of arrays
@@ -40,40 +41,22 @@ byte lightarray = 13, // light array at pin 13
      //                   0   -3.5
      //                   C°
 
-void jingle(char sequence) { // runs when turned on and plays sequence referred to in parameters as string argument
+char *power = "power", *complete = "complete", *better = "better", *worse = "worse"; // strings for following function
+
+void jingle(char *sequence) { // runs when turned on and plays sequence referred to in parameters as string argument
     note = 0; // resets note position
     for(note < sequencelength; note++;) { // until the sequence is completed, plays the note and moves to the next note
-        if(sequence == "power") { // if "jingle(power)" is called
-//          if(powerjingle[note] == 0) { // if note frequency value is 0
-//              noTone(speaker); // treats it as a rest
-//          }
-//          else {
-                tone(speaker, powerjingle[note]); // plays note at current position
-//          }
+        if(sequence == power) { // if "jingle(power)" is called
+            tone(speaker, powerjingle[note]); // plays note at current position
         }
-        if(sequence == "completed") {
-//            if(completedjingle[note] == 0) {
-//              noTone(speaker);
-//          }
-//          else {
-                tone(speaker, completedjingle[note]);
-//          }
+        if(sequence == complete) {
+            tone(speaker, completedjingle[note]);
         }
-        if(sequence == "better") {
-//          if(betterjingle[note] == 0) {
-//              noTone(speaker);
-//          }
-//          else {
-                tone(speaker, betterjingle[note]);
-//          }
+        if(sequence == better) {
+            tone(speaker, betterjingle[note]);
         }
-        if(sequence == "worse") {
-//          if(worsejingle[note] == 0) {
-//              noTone(speaker);
-//          }
-//          else {
-                tone(speaker, worsejingle[note]);
-//          }
+        if(sequence == worse) {
+            tone(speaker, worsejingle[note]);
         }
         delay(blocklength); // note lasts for one block
     }
@@ -83,11 +66,11 @@ void jingle(char sequence) { // runs when turned on and plays sequence referred 
 void setup() { // runs when Arduino is reset (starts from top when plugged in)
     pinMode(lightarray, OUTPUT);
     pinMode(speaker, OUTPUT);
-    pinMode(touchsensor1, INPUT);
-    pinMode(touchsensor2, INPUT);
-    pinMode(touchsensor3, INPUT);
-    pinMode(touchsensor4, INPUT);
-    while(!(digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4))) {
+    pinMode(readswitch1, INPUT);
+    pinMode(readswitch2, INPUT);
+    pinMode(readswitch3, INPUT);
+    pinMode(readswitch4, INPUT);
+    while(!(digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4))) {
         delay(80);
     digitalWrite(lightarray, HIGH); // turns on light array
     jingle(power);
@@ -95,7 +78,7 @@ void setup() { // runs when Arduino is reset (starts from top when plugged in)
 }
 
 void loop() {
-    completed = digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4);
+    completed = digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4);
     delay(80); // delay between reads for stability
     if(completed/4) { // if all pieces are together
         digitalWrite(lightarray, HIGH);
@@ -103,12 +86,12 @@ void loop() {
         digitalWrite(lightarray, LOW);
         done = 1; // puzzle has been completed
     }
-    if(completed > digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4)) { // if the puzzle has been further completed
+    if(completed > digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4)) { // if the puzzle has been further completed
         digitalWrite(lightarray, HIGH);
         jingle(better);
         digitalWrite(lightarray, LOW);
     }
-    if(completed < (digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4))) { // if the puzzle has been taken apart before it is completed
+    if(completed < (digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4))) { // if the puzzle has been taken apart before it is completed
         digitalWrite(lightarray, HIGH);
         jingle(worse);
         digitalWrite(lightarray, LOW);
