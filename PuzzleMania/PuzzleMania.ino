@@ -72,6 +72,7 @@ void setup() { // runs when Arduino is reset (starts from top when plugged in)
     pinMode(readswitch4, INPUT);
     while(!(digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4))) {
         delay(80);
+    }
     digitalWrite(lightarray, HIGH); // turns on light array
     jingle(power);
     digitalWrite(lightarray, LOW); // turns off light array
