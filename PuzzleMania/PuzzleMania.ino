@@ -44,61 +44,66 @@ void jingle(char sequence) { // runs when turned on and plays sequence referred 
     note = 0; // resets note position
     for(note < sequencelength; note++;) { // until the sequence is completed, plays the note and moves to the next note
         if(sequence == "power") { // if "jingle(power)" is called
-            if(powerjingle[note] == 0) { // if note frequency value is 0
-                noTone(speaker); // treats it as a rest
-            }
-            else {
+//          if(powerjingle[note] == 0) { // if note frequency value is 0
+//              noTone(speaker); // treats it as a rest
+//          }
+//          else {
                 tone(speaker, powerjingle[note]); // plays note at current position
+//          }
         }
         if(sequence == "completed") {
-            if(completedjingle[note] == 0) {
-                noTone(speaker);
-            }
-            else {
+//            if(completedjingle[note] == 0) {
+//              noTone(speaker);
+//          }
+//          else {
                 tone(speaker, completedjingle[note]);
-            }
+//          }
         }
         if(sequence == "better") {
-            if(betterjingle[note] == 0) {
-                noTone(speaker);
-            }
-            else {
+//          if(betterjingle[note] == 0) {
+//              noTone(speaker);
+//          }
+//          else {
                 tone(speaker, betterjingle[note]);
-            }
+//          }
         }
         if(sequence == "worse") {
-            if(worsejingle[note] == 0) {
-                noTone(speaker);
-            }
-            else {
+//          if(worsejingle[note] == 0) {
+//              noTone(speaker);
+//          }
+//          else {
                 tone(speaker, worsejingle[note]);
-            }
+//          }
         }
         delay(blocklength); // note lasts for one block
     }
+    noTone(speaker); // end of sequence
 }
 
-void setup() {
+void setup() { // runs when Arduino is reset (starts from top when plugged in)
     pinMode(lightarray, OUTPUT);
     pinMode(speaker, OUTPUT);
     pinMode(touchsensor1, INPUT);
     pinMode(touchsensor2, INPUT);
     pinMode(touchsensor3, INPUT);
     pinMode(touchsensor4, INPUT);
-    digitalWrite(lightarray, HIGH);
+    while(!(digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4))) {
+        delay(80);
+    digitalWrite(lightarray, HIGH); // turns on light array
     jingle(power);
-    digitalWrite(lightarray, LOW);
+    digitalWrite(lightarray, LOW); // turns off light array
 }
 
 void loop() {
-    completed = (digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4));
-    delay(8); // delay between reads for stability
+    completed = digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4);
+    delay(80); // delay between reads for stability
     if(completed/4) { // if all pieces are together
-        digitalWrite(lightarray, HIGH); // turns on light array
+        digitalWrite(lightarray, HIGH);
         jingle(complete);
+        digitalWrite(lightarray, LOW);
         done = 1; // puzzle has been completed
     }
-    if(completed > (digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4))) { // if the puzzle has been further completed
+    if(completed > digitalRead(touchsensor1) + digitalRead(touchsensor2) + digitalRead(touchsensor3) + digitalRead(touchsensor4)) { // if the puzzle has been further completed
         digitalWrite(lightarray, HIGH);
         jingle(better);
         digitalWrite(lightarray, LOW);
@@ -111,9 +116,8 @@ void loop() {
     else {
         digitalWrite(lightarray, LOW); // turns off light array
     }
-    delay(8);
     while(done = 1 && completed > 0) { // once completed, only reactivate when puzzle is reset
-        delay(8);
+        delay(80);
     }
     if(done == 1) { // if puzzle has been completed and reset
         jingle(power);
