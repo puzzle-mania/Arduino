@@ -14,13 +14,16 @@ byte lightarray = 13, // light array at pin 13
      readswitch4 = 5, // touch sensor at pin 5
      // bottom bun
 
+
      readswitchcount = 2, // how many read switches we've received so far
      sequencelength = 18, // how long note sequences are, counting from 0 because of arrays
      BPS = 6, // how long each note or rest is: 1000 times a fraction of a second
 
+
      note, // currently selected note in sequence
      completed, // whether the puzzle is completed (yes if 4, no otherwise)
      done, // whether the puzzle has been completed (resets when completed = 0)
+
 
      powerjingle[] =     {392,   0, 392,   0, 392, 392, 440, 440, 440, 440, 494, 494, 523, 523, 523, 523, 523, 523}, // plays on reset
      //                   G____     G____     G____-____A____-____-____-____B____-____C____-____-____-____-____-____
@@ -42,7 +45,9 @@ byte lightarray = 13, // light array at pin 13
      //                   0
      //                   C°
 
+
 char *power = "power", *complete = "complete", *better = "better", *worse = "worse"; // strings for following function
+
 
 void jingle(char *sequence) { // runs when turned on and plays sequence referred to in parameters as string argument
     note = 0; // resets note position
@@ -63,6 +68,8 @@ void jingle(char *sequence) { // runs when turned on and plays sequence referred
     }
     noTone(speaker); // end of sequence
 }
+
+
 
 void setup() { // runs when Arduino is reset (starts from top when first plugged in)
     pinMode(lightarray, OUTPUT);
