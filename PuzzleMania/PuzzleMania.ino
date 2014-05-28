@@ -14,8 +14,9 @@ byte lightarray = 13, // light array at pin 13
      readswitch4 = 5, // touch sensor at pin 5
      // bottom bun
 
+     readswitchcount = 2, // how many read switches we've received so far
      sequencelength = 18, // how long note sequences are, counting from 0 because of arrays
-     blocklength = 1000 * 1/6, // how long each note or rest is: 1000 times a fraction of a second
+     BPS = 6, // how long each note or rest is: 1000 times a fraction of a second
 
      note, // currently selected note in sequence
      completed, // whether the puzzle is completed (yes if 4, no otherwise)
@@ -36,9 +37,9 @@ byte lightarray = 13, // light array at pin 13
      //                   0   +3
      //                   C
 
-     worsejingle[] =     {523, 370, 370, 370}; // plays when puzzle is
-     //                   C____F#___-____-____
-     //                   0   -3.5
+     worsejingle[] =     {370, 370, 370, 370}; // plays when puzzle is
+     //                   F#___-____-____-____
+     //                   0
      //                   C°
 
 char *power = "power", *complete = "complete", *better = "better", *worse = "worse"; // strings for following function
@@ -58,12 +59,12 @@ void jingle(char *sequence) { // runs when turned on and plays sequence referred
         if(sequence == worse) {
             tone(speaker, worsejingle[note]);
         }
-        delay(blocklength); // note lasts for one block
+        delay(1000/BPS); // note lasts for one block
     }
     noTone(speaker); // end of sequence
 }
 
-void setup() { // runs when Arduino is reset (starts from top when plugged in)
+void setup() { // runs when Arduino is reset (starts from top when first plugged in)
     pinMode(lightarray, OUTPUT);
     pinMode(speaker, OUTPUT);
     pinMode(readswitch1, INPUT);
@@ -80,20 +81,20 @@ void setup() { // runs when Arduino is reset (starts from top when plugged in)
 }
 
 void loop() {
-    completed = digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4);
+    completion = digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4);
     delay(80); // delay between reads for stability
-    if(completed/4) { // if all pieces are together
+    if(completed/readswitchcount) { // if all pieces are together
         digitalWrite(lightarray, HIGH);
         jingle(complete);
         digitalWrite(lightarray, LOW);
         done = 1; // puzzle has been completed
     }
-    if(completed > digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4)) { // if the puzzle has been further completed
+    if(completion > digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4)) { // if the puzzle has been further completed
         digitalWrite(lightarray, HIGH);
         jingle(better);
         digitalWrite(lightarray, LOW);
     }
-    if(completed < (digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4))) { // if the puzzle has been taken apart before it is completed
+    if(completion < (digitalRead(readswitch1) + digitalRead(readswitch2) + digitalRead(readswitch3) + digitalRead(readswitch4))) { // if the puzzle has been taken apart before it is completed
         digitalWrite(lightarray, HIGH);
         jingle(worse);
         digitalWrite(lightarray, LOW);
@@ -101,7 +102,7 @@ void loop() {
     else {
         digitalWrite(lightarray, LOW); // turns off light array
     }
-    while(done = 1 && completed > 0) { // once completed, only reactivate when puzzle is reset
+    while(done = 1 && completion > 0) { // once completed, only reactivate when puzzle is reset
         delay(80);
     }
     if(done == 1) { // if puzzle has been completed and reset
