@@ -1,5 +1,7 @@
 // PuzzleMania - lights up and plays music when puzzle is turned on and when it is completed
 
+#include <notes.h>
+
 byte lightarray = 13, // light array at pin 13
      speaker = 12, // speaker at pin 12
      touchsensor = 11, // touch sensor at pin 11
@@ -25,23 +27,23 @@ byte lightarray = 13, // light array at pin 13
      done, // whether the puzzle has been completed (resets when completed = 0)
 
 
-     powerjingle[] =     {392,   0, 392,   0, 392, 392, 440, 440, 440, 440, 494, 494, 523, 523, 523, 523, 523, 523}, // plays on reset
-     //                   G____     G____     G____-____A____-____-____-____B____-____C____-____-____-____-____-____
+     powerjingle[] =     {G_4, XXX, G_4, XXX, G_4, G_4, A_4, A_4, A_4, A_4, B_4, B_4, C_5, C_5, C_5, C_5, C_5, C_5  }, // plays on reset
+     //                   *____*    *____*    *____*____*____*____*____*____*____*____*____*____*____*____*____*____*
      //                   0         0         0        +1                  +1        +1
      //                   G major                                                     C major
 
-     completedjingle[] = {523, 523, 392, 392, 330, 330, 684, 684, 784, 784, 684, 684, 660, 660, 660, 660, 660, 660}, // plays on completion
-     //                   C____-____G____-____E____-____F____-____G____-____F____-____E____-____-____-____-____-____
+     completedjingle[] = {C_5, C_5, G_4, G_4, E_4, E_4, F_5, F_5, G_5, G_5, F_5, F_5, E_5, E_5, E_5, E_5, E_5, E_5  }, // plays on completion
+     //                   *____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*
      //                   0        -3        -2        +9        +1        -1        -1
      //                   C major                       F major                       C major
 
-     betterjingle[] =    {392, 523, 523, 523}, // plays when puzzle is further solved
-     //                   G____C____-____-____
+     betterjingle[] =    {G_4, C_5, C_5, C_5  }, // plays when puzzle is further solved
+     //                   *____*____*____*____*
      //                   0   +3
      //                   C
 
-     worsejingle[] =     {370, 370, 370, 370}; // plays when puzzle is
-     //                   F#___-____-____-____
+     worsejingle[] =     {F4_, F4_, F4_, F4_  }; // plays when puzzle is
+     //                   *____*____*____*____*
      //                   0
      //                   C°
 
