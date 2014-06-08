@@ -2,68 +2,65 @@
 
 #include <notes.h>
 
-byte lightarray = 13, // light array at pin 13
+byte light_array = 13, // light array at pin 13
      speaker = 12, // speaker at pin 12
-     touchsensor = 11, // touch sensor at pin 11
+     proximity_sensor = 11, // proximity sensor at pin 11
 
      // top bun
-     readswitch1 = 2, // touch sensor at pin 2
+     read_switch_1 = 2, // touch sensor at pin 2
      // lettuce
-     readswitch2 = 3, // touch sensor at pin 3
+     read_switch_2 = 3, // touch sensor at pin 3
      // tomato
-     readswitch3 = 4, // touch sensor at pin 4
+     read_switch_3 = 4, // touch sensor at pin 4
      // burger
-     readswitch4 = 5, // touch sensor at pin 5
+     read_switch_4 = 5, // touch sensor at pin 5
      // bottom bun
 
-
-     readswitchcount = 2, // how many read switches we've received so far
-     sequencelength = 18, // how long note sequences are, counting from 0 because of arrays
-     BPS = 6, // how long each note or rest is: 1000 times a fraction of a second
-
+     read_switch_count = 2, // how many read switches we've received so far
+     length = 0, // location in array of how long note sequences are, counting from 0 because of arrays
+     BPS = 6, // note changes per second
 
      note, // currently selected note in sequence
      completed, // whether the puzzle is completed (yes if 4, no otherwise)
      done, // whether the puzzle has been completed (resets when completed = 0)
 
 
-     powerjingle[] =     {G_4, XXX, G_4, XXX, G_4, G_4, A_4, A_4, A_4, A_4, B_4, B_4, C_5, C_5, C_5, C_5, C_5, C_5  }, // plays on reset
-     //                   *____*    *____*    *____*____*____*____*____*____*____*____*____*____*____*____*____*____*
-     //                   0         0         0        +1                  +1        +1
-     //                   G major                                                     C major
-
-     completedjingle[] = {C_5, C_5, G_4, G_4, E_4, E_4, F_5, F_5, G_5, G_5, F_5, F_5, E_5, E_5, E_5, E_5, E_5, E_5  }, // plays on completion
-     //                   *____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*
-     //                   0        -3        -2        +9        +1        -1        -1
-     //                   C major                       F major                       C major
-
-     betterjingle[] =    {G_4, C_5, C_5, C_5  }, // plays when puzzle is further solved
+     power_jingle[] =     {18, // notes
+                         G_4, XXX, G_4, XXX, G_4, G_4, A_4, A_4, A_4, A_4, B_4, B_4, C_5, C_5, C_5, C_5, C_5, C_5  }, // plays on reset
+     //                  *____*    *____*    *____*____*____*____*____*____*____*____*____*____*____*____*____*____*
+     //                  0         0         0        +1                  +1        +1
+     //                  G major                                                     C major
+     completed_jingle[] = {18,
+                         C_5, C_5, G_4, G_4, E_4, E_4, F_5, F_5, G_5, G_5, F_5, F_5, E_5, E_5, E_5, E_5, E_5, E_5  }, // plays on completion
+     //                  *____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*____*
+     //                  0        -3        -2        +9        +1        -1        -1
+     //                  C major                       F major                       C major
+     better_jingle[] =    {4,
+                          G_4, C_5, C_5, C_5  }, // plays when puzzle is further solved
      //                   *____*____*____*____*
      //                   0   +3
      //                   C
-
-     worsejingle[] =     {F4_, F4_, F4_, F4_  }; // plays when puzzle is
+     worse_jingle[] =     {4,
+                          F4_, F4_, F4_, F4_  }; // plays when two pieces are taken apart
      //                   *____*____*____*____*
      //                   0
      //                   C°
 
-
 char *power = "power", *complete = "complete", *better = "better", *worse = "worse"; // strings for following function
-
 
 void jingle(char *sequence) { // runs when turned on and plays sequence referred to in parameters as string argument
     note = 0; // resets note position
     for(note < sequencelength; note++;) { // until the sequence is completed, plays the note and moves to the next note
-        if(sequence == power) { // if "jingle(power)" is called
+        if(sequence == power && powerjingle[note] != XXX) { // if "jingle(power)" is called and the note is not a rest
             tone(speaker, powerjingle[note]); // plays note at current position
         }
-        if(sequence == complete) {
+        if(sequence == complete && completedjingle[note] != XXX) {
             tone(speaker, completedjingle[note]);
         }
-        if(sequence == better) {
+        if(sequence == better && betterjingle[note] != XXX) {
             tone(speaker, betterjingle[note]);
         }
-        if(sequence == worse) {
+        if(sequence == worse && worsejingle[note] != XXX) {
             tone(speaker, worsejingle[note]);
         }
         delay(1000/BPS); // note lasts for one block
@@ -71,6 +68,9 @@ void jingle(char *sequence) { // runs when turned on and plays sequence referred
     noTone(speaker); // end of sequence
 }
 
+void jingle(char *sequence) {
+    note = 1;
+    if(sequence == power && note < power_jingle[length] && powerjingle[note] != XXX; note++) { // when "jingle(power" is called and the note is not a rest
 
 
 void setup() { // runs when Arduino is reset (starts from top when first plugged in)
