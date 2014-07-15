@@ -70,8 +70,19 @@ void jingle(char *sequence) { // runs when turned on and plays sequence referred
 
 void jingle(char *sequence) {
     note = 1;
-    if(sequence == power && note < power_jingle[length] && powerjingle[note] != XXX; note++) { // when "jingle(power" is called and the note is not a rest
-
+    if(sequence == power && note < power_jingle[length] && powerjingle[note] != XXX; note++) { // when "jingle(power)" is called and the note is not a rest
+        tone(speaker, power_jingle[note]);
+    }
+    if(sequence == power && note < power_jingle[length] && powerjingle[note] != XXX; note++) { // when "jingle(power)" is called and the note is not a rest
+        tone(speaker, power_jingle[note]);
+    }
+    if(sequence == power && note < power_jingle[length] && powerjingle[note] != XXX; note++) { // when "jingle(power)" is called and the note is not a rest
+        tone(speaker, power_jingle[note]);
+    }
+    if(sequence == power && note < power_jingle[length] && powerjingle[note] != XXX; note++) { // when "jingle(power)" is called and the note is not a rest
+        tone(speaker, power_jingle[note]);
+    }
+}
 
 void setup() { // runs when Arduino is reset (starts from top when first plugged in)
     pinMode(lightarray, OUTPUT);
